@@ -11,7 +11,7 @@ object HmrcBuild extends Build {
   import play.PlayImport._
 
   val nameApp = "play-breadcrumb"
-  val versionApp = "0.0.0"
+  val versionApp = "0.1-SNAPSHOT"
 
   val appDependencies = Seq(
     "com.typesafe.play" %% "play" % PlayVersion.current,
@@ -23,7 +23,7 @@ object HmrcBuild extends Build {
     .enablePlugins(play.PlayScala)
     .settings(version := versionApp)
     .settings(scalaSettings : _*)
-    .settings(defaultSettings() : _*)
+    .settings(defaultSettings(false) : _*)
     .settings(
       targetJvm := "jvm-1.7",
       shellPrompt := ShellPrompt(versionApp),
