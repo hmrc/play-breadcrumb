@@ -1,6 +1,8 @@
 import sbt._
 import Keys._
 
+import scala.util.Properties._
+
 object HmrcBuild extends Build {
 
   import uk.gov.hmrc.DefaultBuildSettings
@@ -11,11 +13,10 @@ object HmrcBuild extends Build {
   import play.PlayImport._
 
   val nameApp = "play-breadcrumb"
-  val versionApp = "0.1-SNAPSHOT"
+  val versionApp = envOrElse("PLAY_BREADCRUMB_VERSION", "999-SNAPSHOT")
 
   val appDependencies = Seq(
     "com.typesafe.play" %% "play" % PlayVersion.current,
-    ws % "provided",
     "org.scalatest" %% "scalatest" % "2.2.1" % "test"
   )
 
@@ -28,12 +29,6 @@ object HmrcBuild extends Build {
       targetJvm := "jvm-1.7",
       shellPrompt := ShellPrompt(versionApp),
       libraryDependencies ++= appDependencies,
-      resolvers := Seq(
-        Opts.resolver.sonatypeReleases,
-        Opts.resolver.sonatypeSnapshots,
-        "typesafe-releases" at "http://repo.typesafe.com/typesafe/releases/",
-        "typesafe-snapshots" at "http://repo.typesafe.com/typesafe/snapshots/"
-      ),
       crossScalaVersions := Seq("2.11.5")
     )
 }
