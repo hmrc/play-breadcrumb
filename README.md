@@ -50,25 +50,32 @@ a 1:1 mapping between request path and breadcrumb items could be:
     }
 ```
 
+Of course your implementation may be as complex as you like.
 
-The next step is to have your controller extend your BreadcrumbFactory:
-
-```
-    class MyController extends MyBreadcrumbFactory
-```
-
-
-Then pass an implicit breadcrumb to your teplate(s) and render the breadcrumbTag where you want
-your breadcrumb to appear:
+The next step is to have your controller extend your BreadcrumbFactory, and make sure your actions use an
+implicit Request:
 
 ```
-    @()(mainContent: Html)(implicit breadcrumb: uk.gov.hmrc.play.breadcrumb.model.Breadcrumb)
+    class MyController extends MyBreadcrumbFactory {
+
+      def index = Action { implicit request =>
+        Ok(views.html.index())
+      }
+    }
+```
+
+
+Then pass an implicit breadcrumb to your template(s) and render the breadcrumbTag where you want
+your breadcrumb to appear. The controller will
+
+```
+    @()(implicit breadcrumb: uk.gov.hmrc.play.breadcrumb.model.Breadcrumb)
 
     @headerContent
 
     @breadcrumbTag(breadcrumb)
 
-    @mainContent
+    Hello, this is the index page!
 
     @footerContent
 ```
