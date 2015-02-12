@@ -23,4 +23,6 @@ package uk.gov.hmrc.play.breadcrumb.model
 
 case class BreadcrumbItem(text: String, url: String)
 
-case class Breadcrumb(items: List[BreadcrumbItem])
+case class Breadcrumb(items: List[BreadcrumbItem]) {
+  def isEmpty = items.isEmpty
+}
