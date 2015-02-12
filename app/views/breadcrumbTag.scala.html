@@ -2,14 +2,16 @@
 
 if(!breadcrumb.isEmpty) {
   <div id="global-breadcrumb" class="header-context">
-    <ol class="group">
-      @breadcrumb.items.zipWithIndex.map { case (item, i) =>
-        @if(i==breadcrumb.items.length-1) {
-          <li>@item.text</li>
-        } else {
-          <li><a href="@item.url">@item.text</a></li>
+    <nav>
+      <ol class="group">
+        @breadcrumb.items.zipWithIndex.map { case (item, i) =>
+          @if(i==breadcrumb.items.length-1) {
+            <li>@item.text</li>
+          } else {
+            <li><a href="@item.url">@item.text</a></li>
+          }
         }
-      }
-    </ol>
+      </ol>
+    </nav>
   </div>
 }
