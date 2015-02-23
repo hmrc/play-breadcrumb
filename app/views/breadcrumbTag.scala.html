@@ -2,12 +2,11 @@
 
 <div id="global-breadcrumb" class="header-context">
   <ol class="group">
-    @breadcrumb.items.zipWithIndex.map { case (item, i) =>
-      @if(i==breadcrumb.items.length-1) {
-        <li>@item.text</li>
-      } else {
-        <li><a href="@item.url">@item.text</a></li>
-      }
+    @breadcrumb.map { item =>
+      <li><a href="@item.url">@item.text</a></li>
+    }
+    @defining(breadcrumb.lastItem) { item =>
+      <li>@item.text</li>
     }
   </ol>
 </div>

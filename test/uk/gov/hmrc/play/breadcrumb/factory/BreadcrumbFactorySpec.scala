@@ -17,23 +17,34 @@ package uk.gov.hmrc.play.breadcrumb.factory
 
 import org.scalatest.{ShouldMatchers, WordSpec}
 import play.api.mvc.Request
+import play.api.test.FakeRequest
 import uk.gov.hmrc.play.breadcrumb.model._
 
 class BreadcrumbFactorySpec extends WordSpec with ShouldMatchers {
-
   "A BreadcrumbFactory" should {
-
     "produce a proper breadcrumb when passed to breadcrumbTag" in {
-
       val f = new BreadcrumbFactory {
-        override def buildBreadcrumb(implicit request: Request[_]): Breadcrumb =  Breadcrumb( List ( BreadcrumbItem("Home","/home"), BreadcrumbItem("Account","/account")))
+        override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(BreadcrumbItem("Home","/home"),
+                                                                                     BreadcrumbItem("Account","/account")))
       }
 
-      val b: String = views.html.breadcrumbTag(f.buildBreadcrumb(null)).toString
-
+      val b: String = views.html.breadcrumbTag(f.buildBreadcrumb(FakeRequest())).toString
       b.contains("""<li><a href="/home">Home</a></li>""") shouldBe true
       b.contains("""<li>Account</li>""") shouldBe true
+    }
 
+    "be iterable" in {
+      val f = new BreadcrumbFactory {
+        override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(
+          BreadcrumbItem("Home","/home"),
+          BreadcrumbItem("Account","/account")
+        ))
+      }
+
+      val breadCrumb = f.buildBreadcrumb(FakeRequest())
+
+      breadCrumb.iterator.toList shouldBe List(BreadcrumbItem("Home","/home"))
+      breadCrumb.lastItem shouldBe BreadcrumbItem("Account","/account")
     }
   }
 }
