@@ -19,5 +19,5 @@ package uk.gov.hmrc.play.breadcrumb.model
 case class BreadcrumbItem(text: String, url: String)
 case class Breadcrumb(items: Vector[BreadcrumbItem]) extends Iterable[BreadcrumbItem] {
   override def iterator = items.iterator.sliding(2).map(_.head)
-  def lastItem = items.last
+  lazy val lastItem = items.last
 }
