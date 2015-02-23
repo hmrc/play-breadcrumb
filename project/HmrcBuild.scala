@@ -2,15 +2,13 @@ import sbt.Keys._
 import sbt._
 import uk.gov.hmrc.SbtBuildInfo
 
-import scala.util.Properties._
-
 object HmrcBuild extends Build {
   import play.core.PlayVersion
   import uk.gov.hmrc.DefaultBuildSettings._
   import uk.gov.hmrc.ShellPrompt
 
   val nameApp = "play-breadcrumb"
-  val versionApp = envOrElse("PLAY_BREADCRUMB_VERSION", "999-SNAPSHOT")
+  val versionApp = "0.1.0"
 
   val appDependencies = Seq(
     "com.typesafe.play" %% "play" % PlayVersion.current,
