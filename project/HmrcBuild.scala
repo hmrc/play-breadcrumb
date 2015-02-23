@@ -1,16 +1,13 @@
+import sbt.Keys._
 import sbt._
-import Keys._
+import uk.gov.hmrc.SbtBuildInfo
 
 import scala.util.Properties._
 
 object HmrcBuild extends Build {
-
-  import uk.gov.hmrc.DefaultBuildSettings
-  import DefaultBuildSettings._
-  import BuildDependencies._
-  import uk.gov.hmrc.{SbtBuildInfo, ShellPrompt}
   import play.core.PlayVersion
-  import play.PlayImport._
+  import uk.gov.hmrc.DefaultBuildSettings._
+  import uk.gov.hmrc.ShellPrompt
 
   val nameApp = "play-breadcrumb"
   val versionApp = envOrElse("PLAY_BREADCRUMB_VERSION", "999-SNAPSHOT")
@@ -29,6 +26,51 @@ object HmrcBuild extends Build {
       targetJvm := "jvm-1.7",
       shellPrompt := ShellPrompt(versionApp),
       libraryDependencies ++= appDependencies,
-      crossScalaVersions := Seq("2.11.5")
+      crossScalaVersions := Seq("2.11.5"),
+      resolvers := Seq(
+        Opts.resolver.sonatypeReleases,
+        Opts.resolver.sonatypeSnapshots,
+        "typesafe-releases" at "http://repo.typesafe.com/typesafe/releases/",
+        "typesafe-snapshots" at "http://repo.typesafe.com/typesafe/snapshots/"
+      )
     )
+    .settings(SbtBuildInfo(): _*)
+    .settings(SonatypeBuild(): _*)
+}
+
+object SonatypeBuild {
+
+  import xerial.sbt.Sonatype._
+
+  def apply() = {
+    sonatypeSettings ++ Seq(
+      pomExtra :=
+        <url>https://www.gov.uk/government/organisations/hm-revenue-customs</url>
+        <licenses>
+          <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          </license>
+        </licenses>
+        <scm>
+          <connection>scm:git@github.com:hmrc/playbreadcrumb.git</connection>
+          <developerConnection>scm:git@github.com:hmrc/playbreadcrumb.git</developerConnection>
+          <url>git@github.com:hmrc/playbreadcrumb.git</url>
+        </scm>
+        <developers>
+          <developer>
+            <id>nicfellows</id>
+            <name>Nic Fellows</name>
+          </developer>
+          <developer>
+            <id>prasadsrimula</id>
+            <name>Prasad Srimula</name>
+          </developer>
+          <developer>
+            <id>harishhurchurn</id>
+            <name>Harish Hurchurn</name>
+          </developer>
+        </developers>
+    )
+  }
 }
