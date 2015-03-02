@@ -5,7 +5,7 @@
     @breadcrumb.map { item =>
       <li><a href="@item.url">@item.text</a></li>
     }
-    @defining(breadcrumb.lastItem) { item =>
+    @breadcrumb.lastItem.map { item =>
       <li>@item.text</li>
     }
   </ol>
