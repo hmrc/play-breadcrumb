@@ -24,27 +24,55 @@ class BreadcrumbFactorySpec extends WordSpec with ShouldMatchers {
   "A BreadcrumbFactory" should {
     "produce a proper breadcrumb when passed to breadcrumbTag" in {
       val f = new BreadcrumbFactory {
-        override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(BreadcrumbItem("Home","/home"),
-                                                                                     BreadcrumbItem("Account","/account")))
+        override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(BreadcrumbItem("Home", "/home"),
+          BreadcrumbItem("Account", "/account")))
       }
 
       val b: String = views.html.breadcrumbTag(f.buildBreadcrumb(FakeRequest())).toString
-      b.contains("""<li><a href="/home">Home</a></li>""") shouldBe true
-      b.contains("""<li>Account</li>""") shouldBe true
+      b.contains( """<li><a href="/home">Home</a></li>""") shouldBe true
+      b.contains( """<li>Account</li>""") shouldBe true
     }
 
     "be iterable" in {
       val f = new BreadcrumbFactory {
         override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(
-          BreadcrumbItem("Home","/home"),
-          BreadcrumbItem("Account","/account")
+          BreadcrumbItem("Home", "/home"),
+          BreadcrumbItem("Account", "/account")
         ))
       }
 
       val breadCrumb = f.buildBreadcrumb(FakeRequest())
 
-      breadCrumb.iterator.toList shouldBe List(BreadcrumbItem("Home","/home"))
-      breadCrumb.lastItem shouldBe BreadcrumbItem("Account","/account")
+      breadCrumb.iterator.toList shouldBe List(BreadcrumbItem("Home", "/home"))
+      breadCrumb.lastItem shouldBe Some(BreadcrumbItem("Account", "/account"))
+    }
+  }
+  
+  "A Breadcrumb with only one item" should {
+    "return an empty iterator and a last item" in {
+      val f = new BreadcrumbFactory {
+        override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(
+          BreadcrumbItem("Home","/home")
+        ))
+      }
+
+      val breadCrumb = f.buildBreadcrumb(FakeRequest())
+
+      breadCrumb.iterator.toList shouldBe List.empty
+      breadCrumb.lastItem shouldBe Some(BreadcrumbItem("Home","/home"))
+    }
+  }
+  
+  "A Breadcrumb with with zero items" should {
+    "deal with the exception which is raised" in {
+      val f = new BreadcrumbFactory {
+        override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector.empty)
+      }
+
+      val breadCrumb = f.buildBreadcrumb(FakeRequest())
+
+      breadCrumb.iterator.toList shouldBe List.empty
+      breadCrumb.lastItem shouldBe None
     }
   }
 }
