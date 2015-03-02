@@ -8,7 +8,7 @@ object HmrcBuild extends Build {
   import uk.gov.hmrc.ShellPrompt
 
   val nameApp = "play-breadcrumb"
-  val versionApp = "0.1.0"
+  val versionApp = "0.1.1"
 
   val appDependencies = Seq(
     "com.typesafe.play" %% "play" % PlayVersion.current,
