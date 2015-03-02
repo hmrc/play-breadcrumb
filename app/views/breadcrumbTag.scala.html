@@ -1,12 +1,14 @@
 @(breadcrumb: uk.gov.hmrc.play.breadcrumb.model.Breadcrumb)
 
 <div id="global-breadcrumb" class="header-context">
-  <ol class="group">
-    @breadcrumb.map { item =>
-      <li><a href="@item.url">@item.text</a></li>
-    }
-    @breadcrumb.lastItem.map { item =>
-      <li>@item.text</li>
-    }
-  </ol>
+  <nav>
+    <ol class="group">
+      @breadcrumb.map { item =>
+        <li><a href="@item.url">@item.text</a></li>
+      }
+      @breadcrumb.lastItem.map { item =>
+        <li>@item.text</li>
+      }
+    </ol>
+  </nav>
 </div>
