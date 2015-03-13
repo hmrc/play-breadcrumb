@@ -25,4 +25,6 @@ case class Breadcrumb(items: Vector[BreadcrumbItem]) extends Iterable[Breadcrumb
   }
   
   lazy val lastItem = items.lastOption
+
+  override def toString = "Breadcrumb: " + iterator.mkString(", ") + ", lastItem: " + lastItem
 }

@@ -47,7 +47,7 @@ class BreadcrumbFactorySpec extends WordSpec with ShouldMatchers {
       breadCrumb.lastItem shouldBe Some(BreadcrumbItem("Account", "/account"))
     }
   }
-  
+
   "A Breadcrumb with only one item" should {
     "return an empty iterator and a last item" in {
       val f = new BreadcrumbFactory {
@@ -62,9 +62,24 @@ class BreadcrumbFactorySpec extends WordSpec with ShouldMatchers {
       breadCrumb.lastItem shouldBe Some(BreadcrumbItem("Home","/home"))
     }
   }
+
+  "A Breadcrumb with two items" should {
+    "return an iterator with one item and a last item" in {
+      val f = new BreadcrumbFactory {
+        override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(
+          BreadcrumbItem("Home","/home"), BreadcrumbItem("Account","/account")
+        ))
+      }
+
+      val breadCrumb = f.buildBreadcrumb(FakeRequest())
+
+      breadCrumb.iterator.toList shouldBe List(BreadcrumbItem("Home","/home"))
+      breadCrumb.lastItem shouldBe Some(BreadcrumbItem("Account","/account"))
+    }
+  }
   
   "A Breadcrumb with with zero items" should {
-    "deal with the exception which is raised" in {
+    "return an empty iterator and no last item" in {
       val f = new BreadcrumbFactory {
         override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector.empty)
       }
