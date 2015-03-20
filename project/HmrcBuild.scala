@@ -1,11 +1,12 @@
 import sbt.Keys._
 import sbt._
-import uk.gov.hmrc.SbtBuildInfo
 
 object HmrcBuild extends Build {
+  import de.heikoseeberger.sbtheader.AutomateHeaderPlugin
   import play.core.PlayVersion
   import uk.gov.hmrc.DefaultBuildSettings._
-  import uk.gov.hmrc.ShellPrompt
+  import uk.gov.hmrc.PublishingSettings._
+  import uk.gov.hmrc.{SbtBuildInfo, ShellPrompt}
 
   val nameApp = "play-breadcrumb"
   val versionApp = "0.1.2"
@@ -17,6 +18,7 @@ object HmrcBuild extends Build {
 
   lazy val playBreadcrumb = Project(nameApp, file("."))
     .enablePlugins(play.PlayScala)
+    .enablePlugins(AutomateHeaderPlugin)
     .settings(version := versionApp)
     .settings(scalaSettings : _*)
     .settings(defaultSettings(false) : _*)
@@ -26,22 +28,18 @@ object HmrcBuild extends Build {
       libraryDependencies ++= appDependencies,
       crossScalaVersions := Seq("2.11.5"),
       resolvers := Seq(
-        Opts.resolver.sonatypeReleases,
-        Opts.resolver.sonatypeSnapshots,
         "typesafe-releases" at "http://repo.typesafe.com/typesafe/releases/",
         "typesafe-snapshots" at "http://repo.typesafe.com/typesafe/snapshots/"
       )
     )
+    .settings(publishAllArtefacts: _*)
     .settings(SbtBuildInfo(): _*)
-    .settings(SonatypeBuild(): _*)
+    .settings(POMMetadata(): _*)
+    .settings(HeaderSettings()) 
 }
 
-object SonatypeBuild {
-
-  import xerial.sbt.Sonatype._
-
+object POMMetadata {
   def apply() = {
-    sonatypeSettings ++ Seq(
       pomExtra :=
         <url>https://www.gov.uk/government/organisations/hm-revenue-customs</url>
         <licenses>
@@ -50,25 +48,34 @@ object SonatypeBuild {
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
           </license>
         </licenses>
-        <scm>
-          <connection>scm:git@github.com:hmrc/playbreadcrumb.git</connection>
-          <developerConnection>scm:git@github.com:hmrc/playbreadcrumb.git</developerConnection>
-          <url>git@github.com:hmrc/playbreadcrumb.git</url>
-        </scm>
-        <developers>
-          <developer>
-            <id>nicfellows</id>
-            <name>Nic Fellows</name>
-          </developer>
-          <developer>
-            <id>prasadsrimula</id>
-            <name>Prasad Srimula</name>
-          </developer>
-          <developer>
-            <id>harishhurchurn</id>
-            <name>Harish Hurchurn</name>
-          </developer>
-        </developers>
-    )
+          <scm>
+            <connection>scm:git@github.com:hmrc/playbreadcrumb.git</connection>
+            <developerConnection>scm:git@github.com:hmrc/playbreadcrumb.git</developerConnection>
+            <url>git@github.com:hmrc/playbreadcrumb.git</url>
+          </scm>
+          <developers>
+            <developer>
+              <id>harish-hurchurn</id>
+              <name>harishhurchurn</name>
+              <url>http://www.ioctl.me</url>
+            </developer>
+            <developer>
+              <id>ni</id>
+              <name>nicfellows</name>
+              <url>http://www.nicshouse.co.uk</url>
+            </developer>
+            <developer>
+              <id>howyp</id>
+              <name>PrasadSrimula</name>
+              <url>http://www.hmrc.gov.uk</url>
+            </developer>
+          </developers>
   }
+}
+
+object HeaderSettings {
+  import de.heikoseeberger.sbtheader.HeaderPlugin.autoImport._
+  import de.heikoseeberger.sbtheader.license.Apache2_0
+ 
+  def apply() = headers := Map("scala" -> Apache2_0("2015", "HM Revenue & Customs"))
 }
