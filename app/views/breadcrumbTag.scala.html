@@ -1,4 +1,4 @@
-@(breadcrumb: uk.gov.hmrc.play.breadcrumb.model.Breadcrumb)
+@(breadcrumb: uk.gov.hmrc.play.breadcrumb.model.Breadcrumb, showLastItem: Boolean = false)
 
 <div id="global-breadcrumb" class="header-context">
   <nav>
@@ -6,7 +6,7 @@
       @breadcrumb.map { item =>
         <li><a href="@item.url">@item.text</a></li>
       }
-      @breadcrumb.lastItem.map { item =>
+      @breadcrumb.lastItem.filter(i => showLastItem).map { item =>
         <li>@item.text</li>
       }
     </ol>

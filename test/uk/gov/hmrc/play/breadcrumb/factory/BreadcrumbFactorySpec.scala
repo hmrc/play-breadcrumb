@@ -22,16 +22,29 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.play.breadcrumb.model._
 
 class BreadcrumbFactorySpec extends WordSpec with ShouldMatchers {
+
   "A BreadcrumbFactory" should {
-    "produce a proper breadcrumb when passed to breadcrumbTag" in {
+
+    "produce a breadcrumb with a last item when passed to breadcrumbTag with showLastItem == true" in {
       val f = new BreadcrumbFactory {
         override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(BreadcrumbItem("Home", "/home"),
           BreadcrumbItem("Account", "/account")))
       }
 
-      val b: String = views.html.breadcrumbTag(f.buildBreadcrumb(FakeRequest())).toString
+      val b: String = views.html.breadcrumbTag(f.buildBreadcrumb(FakeRequest()), true).toString
       b.contains( """<li><a href="/home">Home</a></li>""") shouldBe true
       b.contains( """<li>Account</li>""") shouldBe true
+    }
+
+    "produce a breadcrumb without a last item when passed to breadcrumbTag with showLastItem == false" in {
+      val f = new BreadcrumbFactory {
+        override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(BreadcrumbItem("Home", "/home"),
+          BreadcrumbItem("Account", "/account")))
+      }
+
+      val b: String = views.html.breadcrumbTag(f.buildBreadcrumb(FakeRequest()), false).toString
+      b.contains( """<li><a href="/home">Home</a></li>""") shouldBe true
+      b.contains( """<li>Account</li>""") shouldBe false
     }
 
     "be iterable" in {
