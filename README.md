@@ -1,7 +1,8 @@
 #Play Breadcrumb Plugin
 
-Plugin to provide commom breadcrumb model and template tag
+ [![Download](https://api.bintray.com/packages/hmrc/releases/play-breadcrumb/images/download.svg) ](https://bintray.com/hmrc/releases/play-breadcrumb/_latestVersion) [![Build Status](https://travis-ci.org/hmrc/play-breadcrumb.svg)](https://travis-ci.org/hmrc/play-breadcrumb)
 
+Plugin to provide commom breadcrumb model and template tag
 
 ##Setup
 
