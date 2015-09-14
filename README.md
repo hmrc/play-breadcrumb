@@ -8,7 +8,7 @@ Plugin to provide commom breadcrumb model and template tag
 Add the jar to the projects dependencies:
 
 ```
-    "uk.gov.hmrc" %% "play-breadcrumb" % "0.0.0"
+    "uk.gov.hmrc" %% "play-breadcrumb" % "[INSERT VERSION]"
 ```
 
 Add plugin to play.plugins:
