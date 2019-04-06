@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 HM Revenue & Customs
+ * Copyright 2016 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ class BreadcrumbFactorySpec extends WordSpec with ShouldMatchers {
 
     "produce a breadcrumb with a last item when passed to breadcrumbTag with showLastItem == true" in {
       val f = new BreadcrumbFactory {
-        override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(BreadcrumbItem("Home", "/home"),
+        override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(BreadcrumbItem("Home", "/home",Some("myFunction")),
           BreadcrumbItem("Account", "/account")))
       }
 
@@ -38,27 +38,27 @@ class BreadcrumbFactorySpec extends WordSpec with ShouldMatchers {
 
     "produce a breadcrumb without a last item when passed to breadcrumbTag with showLastItem == false" in {
       val f = new BreadcrumbFactory {
-        override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(BreadcrumbItem("Home", "/home"),
-          BreadcrumbItem("Account", "/account")))
+        override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(BreadcrumbItem("Home", "/home",Some("myFunction")),
+          BreadcrumbItem("Account", "/account",Some("myFunction"))))
       }
 
       val b: String = views.html.breadcrumbTag(f.buildBreadcrumb(FakeRequest()), false).toString
-      b.contains( """<li><a href="/home">Home</a></li>""") shouldBe true
+      b.contains( """<li><a href="/home" onclick="myFunction">Home</a></li>""") shouldBe true
       b.contains( """<li>Account</li>""") shouldBe false
     }
 
     "be iterable" in {
       val f = new BreadcrumbFactory {
         override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(
-          BreadcrumbItem("Home", "/home"),
-          BreadcrumbItem("Account", "/account")
+          BreadcrumbItem("Home", "/home",Some("myFunction")),
+          BreadcrumbItem("Account", "/account",Some("myFunction"))
         ))
       }
 
       val breadCrumb = f.buildBreadcrumb(FakeRequest())
 
-      breadCrumb.iterator.toList shouldBe List(BreadcrumbItem("Home", "/home"))
-      breadCrumb.lastItem shouldBe Some(BreadcrumbItem("Account", "/account"))
+      breadCrumb.iterator.toList shouldBe List(BreadcrumbItem("Home", "/home",Some("myFunction")))
+      breadCrumb.lastItem shouldBe Some(BreadcrumbItem("Account", "/account",Some("myFunction")))
     }
   }
 
@@ -66,14 +66,14 @@ class BreadcrumbFactorySpec extends WordSpec with ShouldMatchers {
     "return an empty iterator and a last item" in {
       val f = new BreadcrumbFactory {
         override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(
-          BreadcrumbItem("Home","/home")
+          BreadcrumbItem("Home","/home",Some("myFunction"))
         ))
       }
 
       val breadCrumb = f.buildBreadcrumb(FakeRequest())
 
       breadCrumb.iterator.toList shouldBe List.empty
-      breadCrumb.lastItem shouldBe Some(BreadcrumbItem("Home","/home"))
+      breadCrumb.lastItem shouldBe Some(BreadcrumbItem("Home","/home",Some("myFunction")))
     }
   }
 
@@ -81,14 +81,14 @@ class BreadcrumbFactorySpec extends WordSpec with ShouldMatchers {
     "return an iterator with one item and a last item" in {
       val f = new BreadcrumbFactory {
         override def buildBreadcrumb(implicit request: Request[_]) = Breadcrumb(Vector(
-          BreadcrumbItem("Home","/home"), BreadcrumbItem("Account","/account")
+          BreadcrumbItem("Home","/home",Some("myFunction")), BreadcrumbItem("Account","/account",Some("myFunction"))
         ))
       }
 
       val breadCrumb = f.buildBreadcrumb(FakeRequest())
 
-      breadCrumb.iterator.toList shouldBe List(BreadcrumbItem("Home","/home"))
-      breadCrumb.lastItem shouldBe Some(BreadcrumbItem("Account","/account"))
+      breadCrumb.iterator.toList shouldBe List(BreadcrumbItem("Home","/home",Some("myFunction")))
+      breadCrumb.lastItem shouldBe Some(BreadcrumbItem("Account","/account",Some("myFunction")))
     }
   }
   

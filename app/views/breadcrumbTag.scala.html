@@ -4,7 +4,12 @@
   <nav>
     <ol class="group">
       @breadcrumb.map { item =>
-        <li><a href="@item.url">@item.text</a></li>
+          item.function.fold{
+            <li><a href="@item.url">@item.text</a></li>
+          }
+          {
+            <li><a href="@item.url" onclick="@item.function">@item.text</a></li>
+          }
       }
       @breadcrumb.lastItem.filter(i => showLastItem).map { item =>
         <li>@item.text</li>
